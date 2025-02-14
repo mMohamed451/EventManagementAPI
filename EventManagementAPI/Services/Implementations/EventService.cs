@@ -1,6 +1,8 @@
 ﻿using EventManagementApi.Dtos;
 using EventManagementApi.Models;
+using EventManagementAPI.Models;
 using EventManagementAPI.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventManagementAPI.Services.Implementation
 {
@@ -31,7 +33,6 @@ namespace EventManagementAPI.Services.Implementation
                 Date = createEventDto.Date,
                 Location = createEventDto.Location,
                 Description = createEventDto.Description,
-                CreatedAt = DateTime.UtcNow
             };
 
             var createdEvent = await _eventRepository.CreateEvent(newEvent);
@@ -56,6 +57,35 @@ namespace EventManagementAPI.Services.Implementation
         public async Task<bool> DeleteEvent(int id)
         {
             return await _eventRepository.DeleteEvent(id);
+        }
+
+        public async Task<List<Attendee>> GetAttendeesForEvent(int eventId)
+        {
+            return await _eventRepository.GetAttendeesForEvent(eventId);
+        }
+
+        public async Task<bool> AddAttendeeToEvent(int eventId, int attendeeId)
+        {
+            EventAttendee eventAttendee = new()
+            {
+                EventId = eventId,
+                AttendeeId = attendeeId
+            };
+            var isAdded = await _eventRepository.AddAttendeeToEvent(eventAttendee);
+            return isAdded;
+        }
+
+        public async Task<bool> RemoveAttendeeFromEvent(int eventId, int attendeeId)
+        {
+            EventAttendee eventAttendee = new()
+            {
+                EventId = eventId,
+                AttendeeId = attendeeId
+            };
+
+
+
+            return await _eventRepository.RemoveAttendeeFromEvent(eventAttendee);
         }
     }
 }

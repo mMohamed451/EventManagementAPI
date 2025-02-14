@@ -53,5 +53,30 @@ namespace EventManagementAPI.Controllers
             if (!isDeleted) return NotFound();
             return Ok();
         }
+
+
+        // GET: api/events/5/attendees
+        [HttpGet("{eventId}/Attendees")]
+        public async Task<ActionResult<IEnumerable<Attendee>>> GetAttendeesForEvent(int eventId)
+        {
+            var attendees = await _eventService.GetAttendeesForEvent(eventId);
+            return Ok(attendees);
+        }
+
+        // POST: api/events/5/attendees
+        [HttpPost("{eventId}/Attendees")]
+        public async Task<IActionResult> AddAttendeeToEvent(int eventId, int attendeeId)
+        {
+            await _eventService.AddAttendeeToEvent(eventId, attendeeId);
+            return NoContent();
+        }
+
+        // DELETE: api/events/5/attendees/3
+        [HttpDelete("{eventId}/Attendees/{attendeeId}")]
+        public async Task<IActionResult> RemoveAttendeeFromEvent(int eventId, int attendeeId)
+        {
+            await _eventService.RemoveAttendeeFromEvent(eventId, attendeeId);
+            return NoContent();
+        }
     }
 }

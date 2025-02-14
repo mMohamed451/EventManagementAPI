@@ -1,7 +1,10 @@
 using EventManagementApi.Data;
 using EventManagementAPI.Repositories.Implementation;
+using EventManagementAPI.Repositories.Implementations;
 using EventManagementAPI.Repositories.Interface;
 using EventManagementAPI.Services.Implementation;
+using EventManagementAPI.Services.Implementations;
+using EventManagementAPI.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Repositories inject
 builder.Services.AddScoped<IEventRepository, EventRepository>();
-
+builder.Services.AddScoped<IAttendeeRepository, AttendeeRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 // Services inject
-//builder.Services.AddScoped<IAttendeesService, AttendeesService>();
+builder.Services.AddScoped<IAttendeeService, AttendeeService>();
 builder.Services.AddScoped<IEventService, EventService>();
-//builder.Services.AddScoped<ITicketsService, TicketsService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
 
 
 builder.Services.AddControllers();
