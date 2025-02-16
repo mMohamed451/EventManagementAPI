@@ -1,5 +1,6 @@
 ﻿
 
+using AutoMapper;
 using EventManagementApi.Dtos;
 using EventManagementApi.Models;
 using EventManagementAPI.Repositories.Interface;
@@ -9,10 +10,12 @@ namespace EventManagementAPI.Services.Implementation
     public class AttendeeService : IAttendeeService
     {
         private readonly IAttendeeRepository _attendeeRepository;
+        private readonly IMapper _mapper;
 
-        public AttendeeService(IAttendeeRepository attendeeRepository)
+        public AttendeeService(IAttendeeRepository attendeeRepository, IMapper mapper)
         {
             _attendeeRepository = attendeeRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Attendee>> GetAllAttendees()
@@ -32,28 +35,9 @@ namespace EventManagementAPI.Services.Implementation
             return await _attendeeRepository.DeleteAttendee(id);
         }
 
-        public async Task<Attendee> CreateAttendee(EventManagementApi.Dtos.UpdateAttendeeDto createAttendeeDto)
-        {
-            Attendee newAttendee = new()
-            {
-                FullName = createAttendeeDto.FullName,
-                Email = createAttendeeDto.Email,
-                PhoneNumber = createAttendeeDto.PhoneNumber,
-            };
-
-            throw new NotImplementedException();
-        }
-
-
         public async Task<Attendee> CreateAttendee(CreateAttendeeDto createAttendeeDto)
         {
-            Attendee newAttendee = new()
-            {
-                FullName = createAttendeeDto.FullName,
-                Email = createAttendeeDto.Email,
-                PhoneNumber = createAttendeeDto.PhoneNumber,
-            };
-
+            var newAttendee = _mapper.Map<Attendee>(createAttendeeDto);
             return await _attendeeRepository.CreateAttendee(newAttendee);
         }
 

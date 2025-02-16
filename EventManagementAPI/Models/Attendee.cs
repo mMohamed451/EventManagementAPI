@@ -17,6 +17,6 @@ namespace EventManagementApi.Models
         [MaxLength(20)]
         public string PhoneNumber { get; set; } = string.Empty;
 
-        public ICollection<EventAttendee> EventAttendees { get; set; } = new List<EventAttendee>();
+        //public ICollection<EventAttendee> EventAttendees { get; set; } = new List<EventAttendee>();
     }
 }

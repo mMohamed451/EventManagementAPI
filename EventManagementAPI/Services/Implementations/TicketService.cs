@@ -1,4 +1,5 @@
-﻿using EventManagementAPI.Dtos.Ticket;
+﻿using AutoMapper;
+using EventManagementAPI.Dtos.Ticket;
 using EventManagementAPI.Models;
 using EventManagementAPI.Repositories.Interface;
 using EventManagementAPI.Services.Interface;
@@ -8,10 +9,11 @@ namespace EventManagementAPI.Services.Implementations
     public class TicketService : ITicketService
     {
         private readonly ITicketRepository _ticketRepository;
-
-        public TicketService(ITicketRepository ticketRepository)
+        private readonly IMapper _mapper;
+        public TicketService(ITicketRepository ticketRepository, IMapper mapper)
         {
             _ticketRepository = ticketRepository;
+            _mapper = mapper;
         }
 
         public async Task<Ticket?> GetTicketByIdAsync(int id)
@@ -28,13 +30,8 @@ namespace EventManagementAPI.Services.Implementations
 
         public async Task<Ticket> CreateTicketAsync(CreateTicketDto createTicketDto)
         {
-            Ticket newTicket = new()
-            {
-                Price = createTicketDto.Price,
-                Type = createTicketDto.Type,
-                EventId = createTicketDto.EventId,
-            };
-        
+            var newTicket = _mapper.Map<Ticket>(createTicketDto);
+
             await _ticketRepository.AddAsync(newTicket);
             return newTicket;
         }
@@ -46,13 +43,8 @@ namespace EventManagementAPI.Services.Implementations
             {
                 throw new KeyNotFoundException("Ticket not found.");
             }
-            Ticket newTicket = new()
-            {
-                Price = updateTicketDto.Price,
-                Type = updateTicketDto.Type,
-                EventId = updateTicketDto.EventId,
-            };
-
+       
+            var newTicket = _mapper.Map<Ticket>(updateTicketDto);
             await _ticketRepository.UpdateAsync(newTicket);
         }
 

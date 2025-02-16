@@ -1,19 +1,21 @@
-﻿using EventManagementApi.Dtos;
+﻿using AutoMapper;
+using EventManagementApi.Dtos;
 using EventManagementApi.Models;
 using EventManagementAPI.Models;
 using EventManagementAPI.Repositories.Interface;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventManagementAPI.Services.Implementation
 {
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
-
-        public EventService(IEventRepository eventRepository)
+        private readonly IMapper _mapper;
+        public EventService(IEventRepository eventRepository, IMapper mapper)
         {
             _eventRepository = eventRepository;
+            _mapper = mapper;
         }
+
 
         public async Task<IEnumerable<Event>> GetAllEvents()
         {
@@ -27,14 +29,8 @@ namespace EventManagementAPI.Services.Implementation
 
         public async Task<Event> CreateEvent(CreateEventDto createEventDto)
         {
-            var newEvent = new Event
-            {
-                Name = createEventDto.Name,
-                Date = createEventDto.Date,
-                Location = createEventDto.Location,
-                Description = createEventDto.Description,
-            };
-
+        
+            var newEvent = _mapper.Map<Event>(createEventDto);
             var createdEvent = await _eventRepository.CreateEvent(newEvent);
 
             return createdEvent;
@@ -71,6 +67,7 @@ namespace EventManagementAPI.Services.Implementation
                 EventId = eventId,
                 AttendeeId = attendeeId
             };
+
             var isAdded = await _eventRepository.AddAttendeeToEvent(eventAttendee);
             return isAdded;
         }
@@ -82,8 +79,6 @@ namespace EventManagementAPI.Services.Implementation
                 EventId = eventId,
                 AttendeeId = attendeeId
             };
-
-
 
             return await _eventRepository.RemoveAttendeeFromEvent(eventAttendee);
         }

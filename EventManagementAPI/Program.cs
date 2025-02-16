@@ -1,4 +1,5 @@
 using EventManagementApi.Data;
+using EventManagementAPI.Mappings;
 using EventManagementAPI.Repositories.Implementation;
 using EventManagementAPI.Repositories.Implementations;
 using EventManagementAPI.Repositories.Interface;
@@ -20,6 +21,8 @@ builder.Services.AddScoped<IAttendeeService, AttendeeService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 
+// Mappers
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
